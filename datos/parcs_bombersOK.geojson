@@ -1,0 +1,9 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "NOM": "Parc de Bombers de Cervera", "UTMX": 355484.50000900001, "UTMY": 4614827.1210449999 }, "geometry": { "type": "Point", "coordinates": [ 1.263930567578885, 41.672102750861818 ] } },
+{ "type": "Feature", "properties": { "NOM": "Parc de Bombers Voluntaris de Guissona", "UTMX": 358123.84693699999, "UTMY": 4627457.844602 }, "geometry": { "type": "Point", "coordinates": [ 1.292614239916315, 41.786292815748524 ] } },
+{ "type": "Feature", "properties": { "NOM": "Parc de Bombers Voluntaris de Torà", "UTMX": 366956.154622, "UTMY": 4630356.2090800004 }, "geometry": { "type": "Point", "coordinates": [ 1.398213987006116, 41.813918450890455 ] } }
+]
+}

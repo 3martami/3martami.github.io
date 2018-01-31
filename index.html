@@ -1,0 +1,160 @@
+<html lang="es">
+<head>
+	<title>Visor TFM Marta</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="autor"/>
+	<meta name="description" content="descripción página">
+	<meta name="robots" content="index,follow">
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+	
+	
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+		}
+		#map {
+			height: 100%;
+			width: 100%;
+			background-color: #ffffff
+		}
+	</style>
+	
+	
+<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>				
+<script src="js/leaflet.ajax.min.js"></script>	<!-- Ordre per poder carregar capes Geojson --> 		
+     <!-- <script src="js/leaflet-search.min.js"></script>   Amb això afegim lupa de buscar	 -->
+ 
+  
+  
+<script>
+
+
+
+
+var map;
+var osm;
+var esri
+var Municipis;
+var Parcs;
+var controlCapas;
+var serveiOrtoCache;
+ 
+function init(){
+	 
+	 
+ map = L.map('map', {center: [41.746492, 1.309450],zoom: 10});
+ 
+		
+		esri = L.tileLayer(  
+		/*Canviar aquesta capa de esri per un servei WMS del ICGC*/
+				'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+				{
+					maxZoom : 17,
+					minZoom : 1,
+					attribution : 'Tiles © Esri',
+
+				}); esri.addTo(map);
+				
+		
+		
+		serveiOrtoCache = L.tileLayer.wms("http://mapcache.icc.cat/map/bases/service?", {
+                        layers: 'orto',
+                        format: 'image/jpeg',
+						
+                        continuousWorld: true,
+                        attribution: 'Institut Cartogràfic i Geològic de Catalunya -ICGC',
+                  });
+		
+		osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {  /*Canviar aquesta capa osm per un servei WMS del ICGC*/
+ 				maxZoom: 19,
+ 				minZoom: 1,
+ 				attribution: 'OSM'
+ 		});
+ 		
+
+		
+		
+		
+		Municipis = L.geoJson.ajax('datos/Municipis_Segarraok.geojson', {
+
+				style: function (feature) {
+							return {color:'#000000',"weight": 0.5,fillColor: "#ff7800", fillOpacity: 0.4,opacity: 1,};
+				},
+				onEachFeature: function(feature, layer) {
+		 			popupContent ="<b>"+feature.properties.MUNICIPI+"</b>";
+		 			layer.bindPopup(popupContent);
+		 		}
+				}).addTo(map); 	
+	
+	
+	
+	
+		Parcs=L.geoJson.ajax('datos/parcs_bombersOK.geojson', {
+
+				pointToLayer: function (feature, latlng) {
+										return L.circleMarker(latlng, {
+											radius: 5,
+									        color: "#FF0700",
+											opacity: 1,
+											fillOpacity: 1,
+										});
+										},
+				         onEachFeature: function(feature, layer) {
+		 			popupContent ="<b>"+feature.properties.NOM+"</b>";
+		 			layer.bindPopup(popupContent);
+		 		}
+				});
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+
+ 
+ var baseMaps = {   /*Aquí anar afegint les capes Base (serà servei WMS orto i topo) */
+	     "Topogràfic": osm,
+		 "Ortofoto" : esri,
+		 "orto_ICGC":serveiOrtoCache
+		 };
+ 
+ 
+ 
+ var overlayMaps = {
+			"Parcs de bombers": Parcs,
+			"Límits municipals": Municipis
+		};
+		
+		
+		
+	controlCapas=L.control.layers(baseMaps, overlayMaps,{collapsed:true});
+	controlCapas.addTo(map);   
+  
+ 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ }
+
+</script>
+</head>
+<body onLoad="init()">
+	<div id="map"></div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<html lang="es">
+<head>
+	<title>Refugis Pirineu Català</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="autor"/>
+	<meta name="description" content="descripción página">
+	<meta name="robots" content="index,follow">
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+	<style>
+		body {
+			margin: 0;
+		}
+		#mapa {
+			height: 100%;
+			width: 100%;
+			background-color: #ffffff
+		}
+	</style>
+<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+<script src="js/leaflet.ajax.min.js"></script>
+<script src="js/L.Control.MousePosition.js"></script>
+<script>
+
+var mapa,osm,controlCapas,capaGeoJson;
+
+function init(){
+
+
+
+	 
+	 map = L.map('mapa', {
+ 			center: [42.386951440524854, 1.759185791015625],
+ 			zoom: 9
+ 	});
+	
+	var Esri_WorldTopoMap = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+	}).addTo(map);
+
+
+	var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+		attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+	});
+ 		
+
+	var capaGeoJson=L.geoJson.ajax('../datos/refugis.geojson', {
+	style:{color:'#00ff00'},
+	style: function (feature) {
+	return {color:'#00ff00'};
+	},
+	
+			onEachFeature: function(feature, layer) {
+			popupContent ="<b>"+feature.properties.refugi+"</b>";
+			layer.bindPopup(popupContent);
+			}  
+			}).addTo(map);
+		
+		
+		
+	var mapaBase = { 
+	'Mapa Topogràfic':Esri_WorldTopoMap,
+	'Imatge Satèl·lit':Esri_WorldImagery, };
+
+	var overlayMaps = {
+	"Refugis": capaGeoJson
+	};
+	
+			controlCapas=L.control.layers(mapaBase, overlayMaps,{collapsed:false});
+			controlCapas.addTo(map);	
+			L.control.mousePosition().addTo(map);	
+		
+}
+
+</script>
+</head>
+<body onLoad="init()">
+	<div id="mapa"></div>
+</body>
+</html>
