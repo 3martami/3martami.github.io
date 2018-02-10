@@ -1,0 +1,33 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 1a residència" }, "geometry": { "type": "Point", "coordinates": [ 1.400595814618569, 41.682039230834718, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 1a residència" }, "geometry": { "type": "Point", "coordinates": [ 1.403065605046866, 41.679514019850295, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 2a residència." }, "geometry": { "type": "Point", "coordinates": [ 1.388581806844408, 41.670236995147839, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 2a residència." }, "geometry": { "type": "Point", "coordinates": [ 1.386339696171512, 41.669856499030672, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 1a residència." }, "geometry": { "type": "Point", "coordinates": [ 1.396601803494079, 41.672443374753378, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 1a residència." }, "geometry": { "type": "Point", "coordinates": [ 1.396060645609781, 41.672348564559428, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 1a residència." }, "geometry": { "type": "Point", "coordinates": [ 1.396758643101122, 41.670816748784347, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 2a residència." }, "geometry": { "type": "Point", "coordinates": [ 1.395011154774545, 41.661339178353195, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 2a residència." }, "geometry": { "type": "Point", "coordinates": [ 1.393936979922356, 41.660829708041703, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 1a residència." }, "geometry": { "type": "Point", "coordinates": [ 1.39521166512632, 41.661080204575597, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 2a residència." }, "geometry": { "type": "Point", "coordinates": [ 1.39889209737994, 41.661364232757435, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Possible Concentració de persones" }, "geometry": { "type": "Point", "coordinates": [ 1.401776469859559, 41.657739544546565, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Possible Concentració de persones" }, "geometry": { "type": "Point", "coordinates": [ 1.409752863421422, 41.658519183175784, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Concentració de persones" }, "geometry": { "type": "Point", "coordinates": [ 1.410746809744626, 41.654402711888189, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 1a residència." }, "geometry": { "type": "Point", "coordinates": [ 1.416419589897509, 41.652561343048326, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatges aïllats" }, "geometry": { "type": "Point", "coordinates": [ 1.417957933008784, 41.649964781912402, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Concentració de persones" }, "geometry": { "type": "Point", "coordinates": [ 1.416931807323833, 41.649078067896191, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 2a residència." }, "geometry": { "type": "Point", "coordinates": [ 1.409715742126769, 41.647407785371293, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 1a residència." }, "geometry": { "type": "Point", "coordinates": [ 1.407210000798697, 41.648303837986788, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 1a residència." }, "geometry": { "type": "Point", "coordinates": [ 1.380158056412121, 41.648420169391521, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 1a residència." }, "geometry": { "type": "Point", "coordinates": [ 1.382235013145357, 41.646064369688382, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 2a residència." }, "geometry": { "type": "Point", "coordinates": [ 1.425053815176463, 41.64543755488085, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 2a residència." }, "geometry": { "type": "Point", "coordinates": [ 1.377807643907814, 41.639981102666489, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 1a residència." }, "geometry": { "type": "Point", "coordinates": [ 1.420082345834491, 41.642402490714588, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 1a residència." }, "geometry": { "type": "Point", "coordinates": [ 1.418514339322658, 41.64304990470648, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Possibilitat de persones treballant" }, "geometry": { "type": "Point", "coordinates": [ 1.437002192446365, 41.639143513890055, 0.0 ] } },
+{ "type": "Feature", "properties": { "US": "Habitatge aïllat de 1a residència." }, "geometry": { "type": "Point", "coordinates": [ 1.395027230634398, 41.660483856059251, 0.0 ] } }
+]
+}

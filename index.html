@@ -58,182 +58,144 @@
 <script>
 
 
-var map;
-var osm;
-var esri;
+;
+var Orto_icgc;
+var topo_icgc;
 var Municipis;
 var Parcs;
-var controlCapas;
-var serveiOrtoCache;
-var CapaPistes;
-var CapaPuntsAigua;
 var CapaHidrants;
-var CapaCarreteres
-var icona_aigua
+var CapaPuntsAigua;
+var CapaVulnerables;
+var CapaPistes;
+var CapaCarreteres;
+var controlCapas
+
 
 
 
 
 function init(){
 
-           /*crs25831 = new L.Proj.CRS('EPSG:25831','+proj=utm +zone=31 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
-                          {
-                               resolutions: [1100, 550, 275, 100, 50, 25, 10, 5, 2, 1, 0.5, 0.25]
-                          }
-                 );*/
+
+var map = L.map('map', {center: [41.746492, 1.309450],zoom: 10});
+
+
+	Orto_icgc =  L.tileLayer('https://geoserveis.icgc.cat/icc_mapesmultibase/noutm/wmts/orto/GRID3857/{z}/{x}/{y}.jpeg'				,{continuousWorld: true,
+                 attribution: 'Institut Cartogràfic i Geològic de Catalunya -ICGC',
+                 });
+				  
+
+	topo_icgc = L.tileLayer('https://geoserveis.icgc.cat/icc_mapesmultibase/noutm/wmts/topo/GRID3857/{z}/{x}/{y}.jpeg', 			{maxZoom: 19,
+					minZoom: 1,
+ 				});topo_icgc.addTo(map);
+
+ 				
+						 
 
 
 
-
- map = L.map('map', {center: [41.746492, 1.309450],zoom: 10});
-
-
-		esri = L.tileLayer(
-		/*Canviar aquesta capa de esri per un servei WMS del ICGC*/
-				'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-				{
-					maxZoom : 17,
-					minZoom : 1,
-					attribution : 'Tiles © Esri',
-
-				}); esri.addTo(map);
-
-
-
-		serveiOrtoCache =  L.tileLayer('https://geoserveis.icgc.cat/icc_mapesmultibase/noutm/wmts/orto/GRID3857/{z}/{x}/{y}.jpeg',{
-
-                        continuousWorld: true,
-                        attribution: 'Institut Cartogràfic i Geològic de Catalunya -ICGC',
-                  });/*http://www.icgc.cat/es/Administracion-y-empresa/Servicios/Servicios-en-linea-Geoservicios/Servicios-para-API-y-Widgets/API-de-Leaflet*/
-
-		osm = L.tileLayer('https://geoserveis.icgc.cat/icc_mapesmultibase/noutm/wmts/topo/GRID3857/{z}/{x}/{y}.jpeg', {  /*Canviar aquesta capa osm per un servei WMS del ICGC*/
- 				maxZoom: 19,
- 				minZoom: 1,
- 				attribution: 'OSM'
- 		});
-
-
-
-
-
-		Municipis = L.geoJson.ajax('datos/Municipis_Segarraok.geojson', {
-
+	Municipis = L.geoJson.ajax('datos/Municipis_Segarraok.geojson', {
 				style: function (feature) {
-							return {color:'#000000',weight:0.5,fillColor: "#ff7800", fillOpacity: 0.4,opacity: 1,};
+				return {color:'#000000',weight:0.5,fillColor: "#ff7800", fillOpacity: 0.4,opacity: 1,};
 				},
 				onEachFeature: function(feature, layer) {
-		 			popupContent ="<b>"+feature.properties.MUNICIPI+"</b>";
-		 			layer.bindPopup(popupContent);
+		 		popupContent ="<b>"+feature.properties.MUNICIPI+"</b>";
+		 		layer.bindPopup(popupContent);
 		 		}
 				}).addTo(map);
 
 
 
-	var icona_parc=L.icon({
-    iconUrl: 'images/iconaParc.png',
-    iconSize:     [16, 16], // size of the icon
-    iconAnchor:   [8, 8], // point of the icon which will correspond to marker's location
-});
-
-
-		Parcs=L.geoJson.ajax('datos/parcs_bombersOK.geojson', {
-
+	Parcs=L.geoJson.ajax('datos/parcs_bombersOK.geojson', {
 				pointToLayer: function (feature, latlng) {
-										return L.marker(latlng, {
-											icon: icona_parc
-										});
-										},
-				         onEachFeature: function(feature, layer) {
-		 			popupContent ="<b>"+feature.properties.NOM+"</b>";
-		 			layer.bindPopup(popupContent);
-		 		}
+				return L.marker(latlng, {
+				icon: icona_parc
+				});},
+				onEachFeature: function(feature, layer) {
+				popupContent ="<b>"+feature.properties.NOM+"</b>";
+				layer.bindPopup(popupContent);
+		 		}});
+				
+			var icona_parc=L.icon({
+				iconUrl: 'images/iconaParc.png',
+				iconSize:     [16, 16], // Mida
+				iconAnchor:   [8, 8], // Punt localització
 				});
-
-
-
-
-		CapaHidrants=L.geoJson.ajax('datos/Hidrants_OK.geojson', {
-				attribution: 'Consell', 
+				
+				
+				
+	CapaHidrants=L.geoJson.ajax('datos/Hidrants_OK.geojson', { 
 				pointToLayer: function (feature, latlng) {
-										return L.circleMarker(latlng, {
-											radius: 1,
-									        color: "#06BAFF",
-											opacity: 1,
-											fillOpacity: 1,
-										});
-										},
-										});
-			icona_aigua=L.icon({
-				iconUrl: 'images/IconaPuntAigua.png',
+							return L.circleMarker(latlng, {
+							radius: 1,
+							color: "#06BAFF",
+							opacity: 1,
+							fillOpacity: 1,
+							});},});
+			
+			
+			
+	CapaPuntsAigua=L.geoJson.ajax('datos/Punts_aigua_OK.geojson', {
+				pointToLayer: function (feature, latlng) {
+				return L.marker(latlng, {
+				icon: icona_puntaigua
+				});},});
+		
+			var icona_puntaigua=L.icon({
+	 		    iconUrl: 'images/IconaPuntAigua.png',
 				iconSize: [13, 13],
 				iconAnchor: [8, 8],
-		});
+				});
 
-		CapaPuntsAigua=L.geoJson.ajax('datos/Punts_aigua_OK.geojson', {
-
+	CapaVulnerables=L.geoJson.ajax('datos/Punts_Vulnerables_OK.geojson', { 
 				pointToLayer: function (feature, latlng) {
-										return L.marker(latlng, {
-											icon: icona_aigua
-											
-											});
-											},
-											});
-		
-
-
-
-
-
-		CapaPistes = L.geoJson.ajax('datos/Pistes_2D_OK.geojson', {
-
-				style: function (feature) {
-							return {color:'#000000',weight: 2,opacity: 1,};
-				},
+							return L.circleMarker(latlng, {
+							radius: 1.5,
+							color: "#00D300",
+							opacity: 1,
+							fillOpacity: 1,
+							});},
+				onEachFeature: function  (feature, layer) {
+				popupContent ="<b>"+feature.properties.US+"</b>";
+		 		layer.bindPopup(popupContent);}
 				});
-				/*No es veu la capa de Pistes*/
-
-		CapaCarreteres = L.geoJson.ajax('datos/Carreteres_2D.geojson', {
-
+	
+	
+	
+	CapaPistes = L.geoJson.ajax('datos/Pistes_2D_OK.geojson', {
 				style: function (feature) {
-							return {color:'#000000',weight: 2,opacity: 1,};
-				},
-				});
+				return {color:'#000000',weight: 2,opacity: 1,};
+				},});
+				
 
-				/*No es veu la capa de Carreteres*/
+	CapaCarreteres = L.geoJson.ajax('datos/Carreteres_2D.geojson', {
+				style: function (feature) {
+				return {color:'#000000',weight: 2,opacity: 1,};
+				},});
 
-
-
-
-
-
-
-
- var baseMaps = {   /*Aquí anar afegint les capes Base (serà servei WMS orto i topo) */
-	     "Topogràfic": osm,
-		 "Ortofoto" : esri,
-		 "orto_ICGC":serveiOrtoCache
-		 };
+				
 
 
+var baseMaps = {"Topogràfic": topo_icgc,"Ortofoto":Orto_icgc};
 
- var overlayMaps = {
-			"Parcs de bombers": Parcs,
+var overlayMaps = {
 			"Límits municipals": Municipis,
-			"Pistes secundàries (3 a 5 m)" : CapaPistes,
-			"Carreteres" : CapaCarreteres,
+			"Parcs de bombers": Parcs,
 			"Hidrants" : CapaHidrants,
-			"Punts d'aigua" : CapaPuntsAigua
+			"Punts d'aigua" : CapaPuntsAigua,
+			"Punts vulnerables" : CapaVulnerables,
+			"Pistes secundàries (3 a 5 m)" : CapaPistes,
+			"Carreteres" : CapaCarreteres			
+			};
 
 
-		};
 
-
-
-	controlCapas=L.control.layers(baseMaps, overlayMaps,{collapsed:false, position: 'topleft'});
-	controlCapas.addTo(map);
-  L.control.mousePosition().addTo(map);
-
- }
+	
+	
+		controlCapas=L.control.layers(baseMaps, overlayMaps,{collapsed:false, position: 'topleft'});
+		controlCapas.addTo(map);
+		L.control.mousePosition().addTo(map);
+		}
 
 
 
