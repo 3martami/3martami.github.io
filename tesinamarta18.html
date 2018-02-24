@@ -11,6 +11,7 @@
    crossorigin=""/><!--Definex la fulla d'estils, com les que incorporen cada plugin i que defineixen caract. com l'amplada, color de fons, tipus de lletra... en quest cas em escollit la fulla d'estils pròpia de leaflet que seria la llibreria de leaflet, però en també podriem crear-ne a gust -->
 	<link rel="stylesheet" href="css/L.Control.MousePosition.css" />
 	<link rel="stylesheet" href="css/leaflet-measure.css" />
+	<link rel="stylesheet" href="css/leaflet-gps.css" />
 
 	
 <body onLoad="init()">
@@ -59,6 +60,7 @@
 <script src="js/L.Control.MousePosition.js"></script>
 
 <script src="js/leaflet-measure.js"></script>
+<script src="js/leaflet-gps.js"></script>
 
 
 
@@ -226,6 +228,7 @@ var overlayMaps = {
 		controlCapas=L.control.layers(baseMaps, overlayMaps,{collapsed:false, position: 'topleft'}); /*el control de capes permet que en les baseMaps només es pugui visualitzar una de les capes (capes excloents) i en les Overlays es permet activar i desactivar la seva visualització de forma independent, útil per mostras elements com marcadors, polígons, rutes... ja que no interfereixen entre sí com ho faria una capa base.  */
 		controlCapas.addTo(map);
 		L.control.mousePosition().addTo(map);
+		//L.control.Gps().addTo(map);
 		L.control.zoom({position:'topright'} ).addTo(map);
 		L.control.scale({imperial:false}).addTo(map);
 		var measureControl = new L.Control.Measure({
@@ -236,7 +239,21 @@ var overlayMaps = {
 					activeColor:'#000000',
 					completedColor:'#FF0000'});
 			measureControl.addTo(map);
-		
+		var gps = new L.Control.Gps({
+					autoCenter:true,
+					position:'topright'
+					});//inizialize control
+
+					gps
+					.on('gps:located', function(e) {
+					e.marker.bindPopup(e.latlng.toString()).openPopup()
+					console.log(e.latlng)
+					})
+					.on('gps:disabled', function(e) {
+						e.marker.closePopup()
+					});
+
+					gps.addTo(map);
 		
 		};
 
