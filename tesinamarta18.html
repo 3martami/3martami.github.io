@@ -33,10 +33,11 @@
 
 		#contenedor {
 			position: absolute;
-    /* width: 100px; */
-    /* height: 100px; */
-    /* left: 50px; */
-    top: 195px;
+			font-family: Verdana ;
+			font-size:12px;
+			font-weight: 600;
+			color:#00000;
+    top: 175px;
     border: 2px solid grey;
     z-index: 1;
     border-radius: 4px;
@@ -65,12 +66,7 @@
 	<script src="js/leaflet-measure.js"></script>
 	<script src="js/leaflet-gps.js"></script>
 	<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
-	<!--
-<script src="js/Control.Geocoder.js"></script>
-<script src="js/config.js"></script>
-<script src="js/localized.js"></script>
-<script src="js/waypoint.js"></script>
--->
+	
 
 
 
@@ -287,7 +283,7 @@
 				]
 			});
 
-//ruta.addTo(map);
+
 
 
 
@@ -316,6 +312,8 @@ if (estat){
 }
 
 
+
+
 }
 
 
@@ -330,6 +328,7 @@ if (estat){
 	
 	<div id="contenedor">
 	<a href="#" onClick="Vista()">Vista general</a><br><br>
+	
 	<input type="checkbox"  onclick="veureRuta(this.checked)" id="ruta"/>Veure ruta
 	</div>
 
