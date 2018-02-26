@@ -1,37 +1,29 @@
 <html lang="es">
+
 <head>
 	<title>Visor web gestió d'emergències</title>
 	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--ordre ue fa referència a disp. movils o tabletes, aquest índex html ha de ser accessible i visualitar-se correctament a qualsevol tipus de pantalla -->
-	<meta name="author" content="Marta Miralles Mora"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!--ordre ue fa referència a disp. movils o tabletes, aquest índex html ha de ser accessible i visualitar-se correctament a qualsevol tipus de pantalla -->
+	<meta name="author" content="Marta Miralles Mora" />
 	<meta name="description" content="Visor web de serveis per SPEIS, comarca de La Segarra">
-	<meta name="robots" content="index,follow">  <!--Això no sé que vol dir -->
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
-   integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
-   crossorigin=""/><!--Definex la fulla d'estils, com les que incorporen cada plugin i que defineixen caract. com l'amplada, color de fons, tipus de lletra... en quest cas em escollit la fulla d'estils pròpia de leaflet que seria la llibreria de leaflet, però en també podriem crear-ne a gust -->
+	<meta name="robots" content="index,follow">
+	<!--Això no sé que vol dir -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+	 crossorigin="" />
+	<!--Definex la fulla d'estils, com les que incorporen cada plugin i que defineixen caract. com l'amplada, color de fons, tipus de lletra... en quest cas em escollit la fulla d'estils pròpia de leaflet que seria la llibreria de leaflet, però en també podriem crear-ne a gust -->
 	<link rel="stylesheet" href="css/L.Control.MousePosition.css" />
 	<link rel="stylesheet" href="css/leaflet-measure.css" />
 	<link rel="stylesheet" href="css/leaflet-gps.css" />
-
-	
-<body onLoad="init()">
-	<div id="mapa-visor"></div>
-
-	<div id="contenedor">
-	<a href="#" onClick="Vista()">Vista general</a>
-	</div>
-
-
-
-</body>
-	
-	
+	<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+	<link rel="stylesheet" href="css/index.css" />
 	<style>
-		body { <!--Estils que li dic simplement que elq ue veig ocupi tota la pantalla, sense marcs.-->
+		body {
 			margin: 0;
 			padding: 0;
 			overflow: hidden;
 		}
+
 		#mapa-visor {
 			height: 100%;
 			width: 100%;
@@ -39,237 +31,313 @@
 		}
 
 
-		#contenedor{position: absolute;
-					width: 100px;
-					height: 100px;
-					left: 50px;
-					top: 10px;
-					border: 2px solid grey;
-					z-index: 1;
-					border-radius: 30px;
-					background-color: white;
-					opacity: 0.8;}
+		#contenedor {
+			position: absolute;
+    /* width: 100px; */
+    /* height: 100px; */
+    /* left: 50px; */
+    top: 195px;
+    border: 2px solid grey;
+    z-index: 1;
+    border-radius: 4px;
+    background-color: white;
+    opacity: 0.8;
+    right: 5px;
+    padding: 5px;
+		}
 
+
+
+		leaflet-routing-container {
+
+			display: none;
+		}
 	</style>
 
 
- <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
-   integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
-   crossorigin=""></script><!-- Conté tot el codi javascript de la llibreria leaflet -->
-<script src="js/leaflet.ajax.min.js"></script>	<!-- Ordre per poder carregar capes Geojson -->
-<script src="js/L.Control.MousePosition.js"></script>
+	<script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
+	 crossorigin=""></script>
+	<!-- Conté tot el codi javascript de la llibreria leaflet -->
+	<script src="js/leaflet.ajax.min.js"></script>
+	<!-- Ordre per poder carregar capes Geojson -->
+	<script src="js/L.Control.MousePosition.js"></script>
 
-<script src="js/leaflet-measure.js"></script>
-<script src="js/leaflet-gps.js"></script>
-
-
-
-
-
-<script>
-
-
-
-var Orto_icgc;
-var topo_icgc;
-var Municipis;
-var Parcs;
-var CapaHidrants;
-var CapaPuntsAigua;
-var CapaVulnerables;
-var CapaPistes;
-var CapaCarreteres;
-var controlCapas
-var controlZoom
-
-
-
-
-function init(){
-
-
-var map = L.map('mapa-visor', {center: [41.746492, 1.309450],zoom: 10,minZoom:9,zoomControl:false});
+	<script src="js/leaflet-measure.js"></script>
+	<script src="js/leaflet-gps.js"></script>
+	<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+	<!--
+<script src="js/Control.Geocoder.js"></script>
+<script src="js/config.js"></script>
+<script src="js/localized.js"></script>
+<script src="js/waypoint.js"></script>
+-->
 
 
 
 
 
-
-		//LA classe tilelayer permet afegir capes raster al mapa. que va acompanyada de la URL del servei de mapes corresponent. les {xyz} serveixen per que la APE pugui seleccionar el nivell de zoom i coordenades de casa "tile" segons sigui necesssari, ja q akests mapes es serveixen mitjançant teseles en comptes del mapa complert. i Tambe inclou una referència al format de la imatge que dependrà de cada proveedor, en aquest cas jpeg. I per afegir les capes al mapa s'utilitze el mètode addTo()
-	Orto_icgc =  L.tileLayer('https://geoserveis.icgc.cat/icc_mapesmultibase/noutm/wmts/orto/GRID3857/{z}/{x}/{y}.jpeg'				,{continuousWorld: true,
-                 attribution: 'Institut Cartogràfic i Geològic de Catalunya -ICGC',
-                 });
+	<script>
 
 
-	topo_icgc = L.tileLayer('https://geoserveis.icgc.cat/icc_mapesmultibase/noutm/wmts/topo/GRID3857/{z}/{x}/{y}.jpeg', 			{maxZoom: 19,
-					minZoom: 1,attribution: 'Institut Cartogràfic i Geològic de Catalunya -ICGC',
- 				});topo_icgc.addTo(map);
 
-	var SOC_wms = L.tileLayer.wms('http://geoserveis.geoportal.cat/dgpeis_10202_soc/wms/service?', {
-				layers: 'quadrants_soc,seccions_soc', 
-				attribution:'Direcció General de Prevenció Extinció d’Incendis i Salvaments',
+		var Orto_icgc;
+		var topo_icgc;
+		var Municipis;
+		var Parcs;
+		var CapaHidrants;
+		var CapaPuntsAigua;
+		var CapaVulnerables;
+		var CapaPistes;
+		var CapaCarreteres;
+		var controlCapas
+		var controlZoom
+		var map;
+		var ruta;
+
+
+
+
+		function init() {
+
+
+			map = L.map('mapa-visor', { center: [41.746492, 1.309450], zoom: 10, minZoom: 9, zoomControl: false });
+
+
+			//LA classe tilelayer permet afegir capes raster al mapa. que va acompanyada de la URL del servei de mapes corresponent. les {xyz} serveixen per que la APE pugui seleccionar el nivell de zoom i coordenades de casa "tile" segons sigui necesssari, ja q akests mapes es serveixen mitjançant teseles en comptes del mapa complert. i Tambe inclou una referència al format de la imatge que dependrà de cada proveedor, en aquest cas jpeg. I per afegir les capes al mapa s'utilitze el mètode addTo()
+			Orto_icgc = L.tileLayer('https://geoserveis.icgc.cat/icc_mapesmultibase/noutm/wmts/orto/GRID3857/{z}/{x}/{y}.jpeg', {
+				continuousWorld: true,
+				attribution: 'Institut Cartogràfic i Geològic de Catalunya -ICGC',
+			});
+
+
+			topo_icgc = L.tileLayer('https://geoserveis.icgc.cat/icc_mapesmultibase/noutm/wmts/topo/GRID3857/{z}/{x}/{y}.jpeg', {
+				maxZoom: 19,
+				minZoom: 1, attribution: 'Institut Cartogràfic i Geològic de Catalunya -ICGC',
+			}); topo_icgc.addTo(map);
+
+			var SOC_wms = L.tileLayer.wms('http://geoserveis.geoportal.cat/dgpeis_10202_soc/wms/service?', {
+				layers: 'quadrants_soc,seccions_soc',
+				attribution: 'Direcció General de Prevenció Extinció d’Incendis i Salvaments',
 				format: 'image/png',
-				transparent:true,
-				});
+				transparent: true,
+			});
 
 
 
 
-	Municipis = L.geoJson.ajax('datos/Municipis_Segarraok.geojson', {
+			Municipis = L.geoJson.ajax('datos/Municipis_Segarraok.geojson', {
 				attribution: '©Generalitat de Catalunya',
 				style: function (feature) {
-				return {color:'#000000',weight:0.5,fillColor: "#C7C7C7", fillOpacity: 0.6,opacity: 1,};
+					return { color: '#000000', weight: 0.5, fillColor: "#C7C7C7", fillOpacity: 0.6, opacity: 1, };
 				},
-				onEachFeature: function(feature, layer) {
-		 		popupContent ="<b>"+feature.properties.MUNICIPI+"</b>";
-		 		layer.bindPopup(popupContent);
-		 		}
-				}).addTo(map);
+				onEachFeature: function (feature, layer) {
+					popupContent = "<b>" + feature.properties.MUNICIPI + "</b>";
+					layer.bindPopup(popupContent);
+				}
+			}).addTo(map);
 
-				
 
-	Parcs=L.geoJson.ajax('datos/parcs_bombersOK.geojson', {
+
+			Parcs = L.geoJson.ajax('datos/parcs_bombersOK.geojson', {
 				attribution: '©Generalitat de Catalunya',
 				pointToLayer: function (feature, latlng) {
-				return L.marker(latlng, {
-				icon: icona_parc
-				});},
-				onEachFeature: function(feature, layer) {
-				popupContent ="<b>"+feature.properties.NOM+"</b>";
-				layer.bindPopup(popupContent);
-		 		}});
+					return L.marker(latlng, {
+						icon: icona_parc
+					});
+				},
+				onEachFeature: function (feature, layer) {
+					popupContent = "<b>" + feature.properties.NOM + "</b>";
+					layer.bindPopup(popupContent);
+				}			
+});
 
-			var icona_parc=L.icon({
+			var icona_parc = L.icon({
 				iconUrl: 'images/iconaParc.png',
-				iconSize:     [16, 16], // Mida
-				iconAnchor:   [8, 8], // Punt localització
-				});
+				iconSize: [16, 16], // Mida
+				iconAnchor: [8, 8], // Punt localització
+			});
 
 
 
-	CapaHidrants=L.geoJson.ajax('datos/Hidrants_OK.geojson', {
+			CapaHidrants = L.geoJson.ajax('datos/Hidrants_OK.geojson', {
 				attribution: 'Consell Comarcar de la Segarra',
 				pointToLayer: function (feature, latlng) {
-							return L.circleMarker(latlng, {
-							radius: 1,
-							color: "#18059D",
-							opacity: 1,
-							fillOpacity: 1,
-							});},});
+					return L.circleMarker(latlng, {
+						radius: 1,
+						color: "#18059D",
+						opacity: 1,
+						fillOpacity: 1,
+					});
+				},			
+});
 
 
 
-	CapaPuntsAigua=L.geoJson.ajax('datos/Punts_aigua_OK.geojson', {
+			CapaPuntsAigua = L.geoJson.ajax('datos/Punts_aigua_OK.geojson', {
 				attribution: 'Consell Comarcar de la Segarra',
 				pointToLayer: function (feature, latlng) {
-				return L.marker(latlng, {
-				icon: icona_puntaigua
-				});},});
+					return L.marker(latlng, {
+						icon: icona_puntaigua
+					});
+				},			
+});
 
-			var icona_puntaigua=L.icon({
-	 		    iconUrl: 'images/IconaPuntAigua.png',
-				iconSize: [15,15],
+			var icona_puntaigua = L.icon({
+				iconUrl: 'images/IconaPuntAigua.png',
+				iconSize: [15, 15],
 				iconAnchor: [8, 8],
-				});
+			});
 
-	CapaVulnerables=L.geoJson.ajax('datos/Punts_Vulnerables_OK.geojson', {
+			CapaVulnerables = L.geoJson.ajax('datos/Punts_Vulnerables_OK.geojson', {
 				attribution: 'Consell Comarcar de la Segarra',
 				pointToLayer: function (feature, latlng) {
-							return L.circleMarker(latlng, {
-							radius: 3,
-							fillColor: "#00D300",
-							color: "#FD1B21",
-							weight: 1.5,
-							opacity: 1,
-							fillOpacity: 1,
-							});},
-				onEachFeature: function  (feature, layer) {
-				popupContent ="<b>"+feature.properties.US+"</b>";
-		 		layer.bindPopup(popupContent);}
-				});
+					return L.circleMarker(latlng, {
+						radius: 3,
+						fillColor: "#00D300",
+						color: "#FD1B21",
+						weight: 1.5,
+						opacity: 1,
+						fillOpacity: 1,
+					});
+				},
+				onEachFeature: function (feature, layer) {
+					popupContent = "<b>" + feature.properties.US + "</b>";
+					layer.bindPopup(popupContent);
+				}
+			});
 
 
 
-	CapaPistes = L.geoJson.ajax('datos/Pistes_2D_OK.geojson', {
+			CapaPistes = L.geoJson.ajax('datos/Pistes_2D_OK.geojson', {
 				attribution: 'Consell Comarcar de la Segarra',
 				style: function (feature) {
-				return {color:'#FF9400',weight: 2,opacity: 1,};
+					return { color: '#FF9400', weight: 2, opacity: 1, };
 				},
-				});
+			});
 
 
-	CapaCarreteres = L.geoJson.ajax('datos/Carreteres_2D.geojson', {
+			CapaCarreteres = L.geoJson.ajax('datos/Carreteres_2D.geojson', {
 				attribution: '©Generalitat de Catalunya',
 				style: function (feature) {
-				return {color:'#F6001D',weight: 2,opacity: 1,};
+					return { color: '#F6001D', weight: 2, opacity: 1, };
 				},
-				});
+			});
 
 
 
 
-var baseMaps = {"Topogràfic": topo_icgc,"Ortofoto":Orto_icgc};
+			var baseMaps = { "Topogràfic": topo_icgc, "Ortofoto": Orto_icgc };
 
-var overlayMaps = {
-			"Límits municipals": Municipis,
-			"Parcs de bombers": Parcs,
-			"Hidrants" : CapaHidrants,
-			"Punts d'aigua" : CapaPuntsAigua,
-			"Punts vulnerables" : CapaVulnerables,
-			"Pistes secundàries (3 a 5 m)" : CapaPistes,
-			"Carreteres" : CapaCarreteres,
-			"Quadrícula SOC":SOC_wms
+			var overlayMaps = {
+				"Límits municipals": Municipis,
+				"Parcs de bombers": Parcs,
+				"Hidrants": CapaHidrants,
+				"Punts d'aigua": CapaPuntsAigua,
+				"Punts vulnerables": CapaVulnerables,
+				"Pistes secundàries (3 a 5 m)": CapaPistes,
+				"Carreteres": CapaCarreteres,
+				"Quadrícula SOC": SOC_wms
 			};
 			/*Grups de capes Overlays, */
 
 
 
 
-		controlCapas=L.control.layers(baseMaps, overlayMaps,{collapsed:false, position: 'topleft'}); /*el control de capes permet que en les baseMaps només es pugui visualitzar una de les capes (capes excloents) i en les Overlays es permet activar i desactivar la seva visualització de forma independent, útil per mostras elements com marcadors, polígons, rutes... ja que no interfereixen entre sí com ho faria una capa base.  */
-		controlCapas.addTo(map);
-		L.control.mousePosition().addTo(map);
-		//L.control.Gps().addTo(map);
-		L.control.zoom({position:'topright'} ).addTo(map);
-		L.control.scale({imperial:false}).addTo(map);
-		var measureControl = new L.Control.Measure({
-					position:'topright',
-					primaryLengthUnit: 'meters',
-					secondaryLengthUnit: 'kilometers',
-					localization: 'ca',
-					activeColor:'#000000',
-					completedColor:'#FF0000'});
+			controlCapas = L.control.layers(baseMaps, overlayMaps, { collapsed: true, position: 'topleft' }); /*el control de capes permet que en les baseMaps només es pugui visualitzar una de les capes (capes excloents) i en les Overlays es permet activar i desactivar la seva visualització de forma independent, útil per mostras elements com marcadors, polígons, rutes... ja que no interfereixen entre sí com ho faria una capa base.  */
+			controlCapas.addTo(map);
+			L.control.mousePosition().addTo(map);
+			L.control.zoom({ position: 'topright' }).addTo(map);
+			L.control.scale({ imperial: false }).addTo(map);
+			var measureControl = new L.Control.Measure({
+				position: 'topright',
+				primaryLengthUnit: 'meters',
+				secondaryLengthUnit: 'kilometers',
+				localization: 'ca',
+				activeColor: '#000000',
+				completedColor: '#FF0000'
+			});
 			measureControl.addTo(map);
-		var gps = new L.Control.Gps({
-					autoCenter:true,
-					position:'topright'
-					});//inizialize control
 
-					gps
-					.on('gps:located', function(e) {
+			var gps = new L.Control.Gps({
+				autoCenter: true,
+				position: 'topright'
+			});//inizialize control
+
+			gps
+				.on('gps:located', function (e) {
 					e.marker.bindPopup(e.latlng.toString()).openPopup()
 					console.log(e.latlng)
-					})
-					.on('gps:disabled', function(e) {
-						e.marker.closePopup()
-					});
+				})
+				.on('gps:disabled', function (e) {
+					e.marker.closePopup()
+				});
 
-					gps.addTo(map);
-		
+			gps.addTo(map);
+
+
+			ruta = new L.Routing.control({
+				collapsible: true,
+				collapseBtnClass: 'leaflet-routing-collapse-btn',
+				position: "bottomright",
+				language: 'en',
+				autoRoute: true,
+				waypoints: [
+					L.latLng(41.726233, 1.366944),
+					L.latLng(41.71111, 1.29639)
+				]
+			});
+
+//ruta.addTo(map);
+
+
+
+
 		};
 
 
 
- function Vista(){
-		map.setView([41.746492, 1.309450],10);
- }
+		function Vista() {
+			map.setView([41.746492, 1.309450], 10);
+		}
+
+function veureRuta(estat){
+if (estat){
+	ruta.addTo(map);
+	ruta.setWaypoints([
+					L.latLng(41.726233, 1.366944),
+					L.latLng(41.71111, 1.29639)
+				]);
+
+
+
+}else{
+	map.removeControl(ruta);
+
+}
+
+
+}
 
 
 
 
 
-
-
-</script>
+	</script>
 </head>
+
+<body onLoad="init()">
+	<div id="mapa-visor" class="map"></div>
+	
+	<div id="contenedor">
+	<a href="#" onClick="Vista()">Vista general</a><br><br>
+	<input type="checkbox"  onclick="veureRuta(this.checked)" id="ruta"/>Veure ruta
+	</div>
+
+
+
+</body>
+
+
+
 
 </html>
